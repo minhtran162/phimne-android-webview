@@ -105,7 +105,6 @@ class WebViewFragment : Fragment(), BackPressInterceptor, JellyfinWebChromeClien
                     webViewBinding.loadingContainer.isVisible = false
                     webView.fadeIn()
                 }
-                requestNoBatteryOptimizations(webViewBinding.root)
             }
 
             override fun onErrorReceived() {
@@ -187,6 +186,20 @@ class WebViewFragment : Fragment(), BackPressInterceptor, JellyfinWebChromeClien
         webViewClient = jellyfinWebViewClient
         webChromeClient = JellyfinWebChromeClient(this@WebViewFragment)
         settings.applyDefault()
+
+        val currentWebViewPackage = WebView.getCurrentWebViewPackage()
+        val webViewVersion = currentWebViewPackage?.versionName ?: "136.0.7103.125"
+
+        // Set Smart-TV User-Agent here
+        settings.userAgentString = String.format(
+            "Mozilla/5.0 (Linux; Android %s; %s Build/%s; SMART-TV) " +
+                "AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/%s Safari/537.36",
+            android.os.Build.VERSION.RELEASE,
+            android.os.Build.MODEL,
+            android.os.Build.ID,
+            webViewVersion,
+        );
+
         addJavascriptInterface(NativeInterface(requireContext()), "NativeInterface")
         addJavascriptInterface(nativePlayer, "NativePlayer")
         addJavascriptInterface(externalPlayer, "ExternalPlayer")
