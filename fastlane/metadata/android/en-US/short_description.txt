@@ -1,1 +1,1 @@
-Mobile client for Jellyfin, the free software media system
+Mobile client for Phim Nè, the free software media system

@@ -1,6 +1,6 @@
 Sinu meedia sinu tingimustel.
 
-Jellyfin projekt on avatud lähtekoodiga vaba tarkvara meediaserver. Pole teenustasu, pole jälgimist ega varjatud plaani. Hangi meie tasuta server, et koguda kogu oma muusika, video, fotod ja muu ühte kohta.
+Phim Nè projekt on avatud lähtekoodiga vaba tarkvara meediaserver. Pole teenustasu, pole jälgimist ega varjatud plaani. Hangi meie tasuta server, et koguda kogu oma muusika, video, fotod ja muu ühte kohta.
 
 Rakenduse kasutamiseks peab olema Jellyfini server häälestatud ja käivitatud. Lisateavet leiab aadressilt<a href="https://jellyfin.org/" target="_blank">jellyfin.org</a>.
 
