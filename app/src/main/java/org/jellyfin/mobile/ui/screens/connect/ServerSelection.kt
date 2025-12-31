@@ -1,6 +1,5 @@
 package org.jellyfin.mobile.ui.screens.connect
 
-import android.view.KeyEvent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExitTransition
@@ -16,18 +15,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.ListItem
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.runtime.Composable
@@ -45,11 +39,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.input.key.onKeyEvent
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import org.jellyfin.mobile.R
@@ -59,6 +49,7 @@ import org.jellyfin.mobile.ui.state.CheckUrlState
 import org.jellyfin.mobile.ui.state.ServerSelectionMode
 import org.jellyfin.mobile.ui.utils.CenterRow
 import org.koin.compose.koinInject
+import org.jellyfin.mobile.BuildConfig
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Suppress("LongMethod")
@@ -70,7 +61,6 @@ fun ServerSelection(
     onConnected: suspend (String) -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val keyboardController = LocalSoftwareKeyboardController.current
     var serverSelectionMode by remember { mutableStateOf(ServerSelectionMode.ADDRESS) }
     var hostname by remember { mutableStateOf("") }
     val serverSuggestions = remember { mutableStateListOf<ServerSuggestion>() }
@@ -123,49 +113,48 @@ fun ServerSelection(
         }
     }
 
+    // Auto-connect to predefined server
+    LaunchedEffect(Unit) {
+        val staticServer = BuildConfig.STATIC_SERVER
+            if (staticServer.isNotBlank()) {
+                hostname = staticServer
+                onSubmit()
+        }
+    }
+
     Column {
-        Text(
-            text = stringResource(R.string.connect_to_server_title),
-            modifier = Modifier.padding(bottom = 8.dp),
-            style = MaterialTheme.typography.h5,
-        )
-        Crossfade(
-            targetState = serverSelectionMode,
-            label = "Server selection mode",
-        ) { selectionType ->
-            when (selectionType) {
-                ServerSelectionMode.ADDRESS -> AddressSelection(
-                    text = hostname,
-                    errorText = when {
-                        externalError -> stringResource(R.string.connection_error_cannot_connect)
-                        else -> (checkUrlState as? CheckUrlState.Error)?.message
-                    },
-                    loading = checkUrlState is CheckUrlState.Pending,
-                    onTextChange = { value ->
-                        externalError = false
-                        checkUrlState = CheckUrlState.Unchecked
-                        hostname = value
-                    },
-                    onDiscoveryClick = {
-                        externalError = false
-                        keyboardController?.hide()
-                        serverSelectionMode = ServerSelectionMode.AUTO_DISCOVERY
-                    },
-                    onSubmit = {
-                        onSubmit()
-                    },
+        Column {
+            CenterRow {
+                Text(
+                    text = stringResource(R.string.connect_to_server_title),
+                    modifier = Modifier.padding(bottom = 8.dp),
+                    style = MaterialTheme.typography.h5,
                 )
-                ServerSelectionMode.AUTO_DISCOVERY -> ServerDiscoveryList(
-                    serverSuggestions = serverSuggestions,
-                    onGoBack = {
-                        serverSelectionMode = ServerSelectionMode.ADDRESS
-                    },
-                    onSelectServer = { url ->
-                        hostname = url
-                        serverSelectionMode = ServerSelectionMode.ADDRESS
-                        onSubmit()
-                    },
-                )
+            }
+            Crossfade(
+                targetState = serverSelectionMode,
+                label = "Server selection mode",
+            ) { selectionType ->
+                when (selectionType) {
+                    ServerSelectionMode.ADDRESS -> AddressSelection(
+                        errorText = when {
+                            externalError -> stringResource(R.string.connection_error_cannot_connect)
+                            else -> (checkUrlState as? CheckUrlState.Error)?.message
+                        },
+                        loading = checkUrlState is CheckUrlState.Pending,
+                    )
+                    ServerSelectionMode.AUTO_DISCOVERY -> ServerDiscoveryList(
+                        serverSuggestions = serverSuggestions,
+                        onGoBack = {
+                            serverSelectionMode = ServerSelectionMode.ADDRESS
+                        },
+                        onSelectServer = { url ->
+                            hostname = url
+                            serverSelectionMode = ServerSelectionMode.ADDRESS
+                            onSubmit()
+                        },
+                    )
+                }
             }
         }
     }
@@ -174,78 +163,17 @@ fun ServerSelection(
 @Stable
 @Composable
 private fun AddressSelection(
-    text: String,
     errorText: String?,
     loading: Boolean,
-    onTextChange: (String) -> Unit,
-    onDiscoveryClick: () -> Unit,
-    onSubmit: () -> Unit,
 ) {
     Column {
-        ServerUrlField(
-            text = text,
-            errorText = errorText,
-            onTextChange = onTextChange,
-            onSubmit = onSubmit,
-        )
         AnimatedErrorText(errorText = errorText)
-        if (!loading) {
-            Spacer(modifier = Modifier.height(12.dp))
-            StyledTextButton(
-                text = stringResource(R.string.connect_button_text),
-                enabled = text.isNotBlank(),
-                onClick = onSubmit,
-            )
-            StyledTextButton(
-                text = stringResource(R.string.choose_server_button_text),
-                onClick = onDiscoveryClick,
-            )
-        } else {
+        if (loading) {
             CenterRow {
                 CircularProgressIndicator(modifier = Modifier.padding(top = 16.dp, bottom = 8.dp))
             }
         }
     }
-}
-
-@Stable
-@Composable
-private fun ServerUrlField(
-    text: String,
-    errorText: String?,
-    onTextChange: (String) -> Unit,
-    onSubmit: () -> Unit,
-) {
-    OutlinedTextField(
-        value = text,
-        onValueChange = onTextChange,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 8.dp)
-            .onKeyEvent { keyEvent ->
-                when (keyEvent.nativeKeyEvent.keyCode) {
-                    KeyEvent.KEYCODE_ENTER -> {
-                        onSubmit()
-                        true
-                    }
-                    else -> false
-                }
-            },
-        label = {
-            Text(text = stringResource(R.string.host_input_hint))
-        },
-        isError = errorText != null,
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Uri,
-            imeAction = ImeAction.Go,
-        ),
-        keyboardActions = KeyboardActions(
-            onGo = {
-                onSubmit()
-            },
-        ),
-        singleLine = true,
-    )
 }
 
 @Stable
@@ -265,25 +193,6 @@ private fun AnimatedErrorText(
             color = MaterialTheme.colors.error,
             style = MaterialTheme.typography.caption,
         )
-    }
-}
-
-@Stable
-@Composable
-private fun StyledTextButton(
-    text: String,
-    enabled: Boolean = true,
-    onClick: () -> Unit,
-) {
-    TextButton(
-        onClick = onClick,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 4.dp),
-        enabled = enabled,
-        colors = ButtonDefaults.buttonColors(),
-    ) {
-        Text(text = text)
     }
 }
 

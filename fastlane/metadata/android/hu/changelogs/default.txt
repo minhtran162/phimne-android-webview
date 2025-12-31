@@ -1,3 +1,3 @@
-Köszönjük, hogy a Jellyfin Androidot használja! Mindig a legújabb kiadású Jellyfin Szerver használata ajánlott.
+Köszönjük, hogy a Phim Nè Androidot használja! Mindig a legújabb kiadású Phim Nè Szerver használata ajánlott.
 
 További információkért kérjük, olvassa el a blogunkat a jellyfin.org oldalon, vagy a teljes changelogot a GitHubon.

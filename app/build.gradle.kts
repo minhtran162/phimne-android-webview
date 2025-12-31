@@ -1,6 +1,8 @@
 import io.gitlab.arturbosch.detekt.Detekt
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+val staticServer: String = project.findProperty("STATIC_SERVER") as? String ?: ""
+
 plugins {
     alias(libs.plugins.android.app)
     alias(libs.plugins.kotlin.android)
@@ -30,6 +32,11 @@ android {
         setProperty("archivesBaseName", "jellyfin-android-v$versionName")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+        buildConfigField(
+            "String",
+            "STATIC_SERVER",
+            "\"$staticServer\""
+        )
     }
 
     val releaseSigningConfig = SigningHelper.loadSigningConfig(project)?.let { config ->

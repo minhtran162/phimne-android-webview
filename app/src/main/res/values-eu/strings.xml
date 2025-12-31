@@ -52,7 +52,7 @@
     <string name="notification_action_rewind">Atzera egin</string>
     <string name="notification_action_previous">Aurrekoa</string>
     <string name="music_notification_channel_description">Musikaren erreprodukzioa kontrolatzeko erabiltzen da</string>
-    <string name="music_notification_channel">Jellyfin musika-erreproduzitzailea</string>
+    <string name="music_notification_channel">Phim Nè musika-erreproduzitzailea</string>
     <string name="media_service_car_item_no_title">Titulurik gabe</string>
     <string name="media_service_car_section_playlists">Erreprodukzioen zerrenda</string>
     <string name="media_service_car_section_genres">Generoak</string>

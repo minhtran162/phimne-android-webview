@@ -1,3 +1,3 @@
-Grazie per aver scelto Jellyfin sulla tua Android TV! Ti raccomandiamo di usare l'ultima versione del Server Jellyfin.
+Grazie per aver scelto Phim Nè sulla tua Android TV! Ti raccomandiamo di usare l'ultima versione del Server Phim Nè.
 
 Per ulteriori informazioni, visita il nostro blog al sito jellyfin.org, o leggi la lista completa di modifiche su GitHub.

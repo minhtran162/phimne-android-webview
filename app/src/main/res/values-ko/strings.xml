@@ -82,7 +82,7 @@
     <string name="playback_info_stream_unknown_title">알 수 없는 타이틀</string>
     <string name="player_error_unsupported_content">이 기기에서 재생할 수 없는 미디어</string>
     <string name="music_notification_channel_description">음악 재생 컨트롤에 사용됩니다</string>
-    <string name="music_notification_channel">Jellyfin 음악 플레이어</string>
+    <string name="music_notification_channel">Phim Nè 음악 플레이어</string>
     <string name="connection_error_unsupported_version_or_product">지원되지 않는 버전 또는 제품</string>
     <string name="pref_exoplayer_remember_brightness">화면 밝기 기억</string>
     <string name="video_player_integrated">내장 플레이어</string>

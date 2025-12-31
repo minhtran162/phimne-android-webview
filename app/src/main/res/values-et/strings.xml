@@ -74,7 +74,7 @@
         <item quantity="other">Prooviti sisestada %d kandidaati, kuid edutult.</item>
     </plurals>
     <string name="bluetooth_permission_title">Kas lubada Bluetoothile juurdepääs\?</string>
-    <string name="bluetooth_permission_message">Juhtmeta kõrvaklappide või kõlarite lahtiühendamise tuvastamiseks vajab rakendus Bluetoothi juurdepääsu. Androidis kirjeldatakse seda luba kui juurdepääsu lähedalasuvatele seadmetele ja hoiatab, et Bluetooth-seadmeid saab kasutada praeguse asukoha tuletamiseks. Rakendus Jellyfin ei kasuta seda luba aga kunagi teie asukoha tuvastamiseks.</string>
+    <string name="bluetooth_permission_message">Juhtmeta kõrvaklappide või kõlarite lahtiühendamise tuvastamiseks vajab rakendus Bluetoothi juurdepääsu. Androidis kirjeldatakse seda luba kui juurdepääsu lähedalasuvatele seadmetele ja hoiatab, et Bluetooth-seadmeid saab kasutada praeguse asukoha tuletamiseks. Rakendus Phim Nè ei kasuta seda luba aga kunagi teie asukoha tuvastamiseks.</string>
     <string name="bluetooth_permission_continue">Jätka</string>
     <string name="battery_optimizations_message">Keelake aku optimeerimine meediumi taasesitamiseks, kui ekraan on välja lülitatud.</string>
     <string name="network_message">Kas soovite lubada allalaadimist mobiilse andmeside või rändlusvõrkude kaudu? Rakenduda võivad teie teenusepakkuja tasud.</string>
