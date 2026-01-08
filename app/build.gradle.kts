@@ -1,7 +1,17 @@
 import io.gitlab.arturbosch.detekt.Detekt
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.util.Properties
+import java.io.FileInputStream
 
-val staticServer: String = project.findProperty("STATIC_SERVER") as? String ?: ""
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localProperties.load(FileInputStream(localPropertiesFile))
+}
+
+val staticServer : String = localProperties.getProperty("STATIC_SERVER")
+    ?: project.findProperty("STATIC_SERVER") as? String
+    ?: ""
 
 plugins {
     alias(libs.plugins.android.app)
