@@ -63,6 +63,7 @@ import org.jellyfin.mobile.utils.applyDefaultLocalAudioAttributes
 import org.jellyfin.mobile.utils.createMediaNotificationChannel
 import org.jellyfin.mobile.utils.setPlaybackState
 import org.koin.android.ext.android.inject
+import java.lang.ref.WeakReference
 import kotlin.coroutines.CoroutineContext
 
 class RemotePlayerService : Service(), CoroutineScope {
@@ -75,7 +76,7 @@ class RemotePlayerService : Service(), CoroutineScope {
     private val notificationManager: NotificationManager by lazy { getSystemService()!! }
     private val imageLoader: ImageLoader by inject()
 
-    private val binder = ServiceBinder(this)
+    private val binder = ServiceBinder()
     private val webappFunctionChannel: WebappFunctionChannel by inject()
     private val remoteVolumeProvider: RemoteVolumeProvider by inject()
     private lateinit var wakeLock: PowerManager.WakeLock
@@ -118,6 +119,9 @@ class RemotePlayerService : Service(), CoroutineScope {
     override fun onCreate() {
         super.onCreate()
         job = Job()
+
+        // Bind service reference to the binder
+        binder.bind(this)
 
         // Create wakelock for the service
         val powerManager: PowerManager = getSystemService(AppCompatActivity.POWER_SERVICE) as PowerManager
@@ -463,11 +467,26 @@ class RemotePlayerService : Service(), CoroutineScope {
         job.cancel()
         mediaSession?.release()
         mediaSession = null
+        
+        // Clear the service reference from binder to prevent memory leak
+        binder.unbind()
+        
         super.onDestroy()
     }
 
-    class ServiceBinder(private val service: RemotePlayerService) : Binder() {
+    class ServiceBinder : Binder() {
+        private var serviceRef: WeakReference<RemotePlayerService>? = null
+        
+        fun bind(service: RemotePlayerService) {
+            serviceRef = WeakReference(service)
+        }
+        
+        fun unbind() {
+            serviceRef?.clear()
+            serviceRef = null
+        }
+        
         val isPlaying: Boolean
-            get() = service.playbackState?.state == PlaybackState.STATE_PLAYING
+            get() = serviceRef?.get()?.playbackState?.state == PlaybackState.STATE_PLAYING
     }
 }
