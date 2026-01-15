@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <string name="app_name">Phim Nè</string>
+    <string name="app_logo">Phim Nè</string>
+    <string name="app_mobile">Phim Ne Android</string>
+    <string name="app_tv">Phim Ne Android TV</string>
+
+    <!-- Loading States -->
+    <string name="initializing">Đang khởi tạo ứng dụng…</string>
+    <string name="loading">Đang tải ứng dụng…</string>
+    <string name="completing">Đang hoàn tất…</string>
+
+
+    <!-- Error Messages -->
+    <string name="error_connection_title">Lỗi kết nối</string>
+    <string name="error_connection_message">Không thể kết nối đến máy chủ. Vui lòng kiểm tra kết nối mạng.</string>
+    <string name="btn_retry">Thử lại</string>
+    <string name="btn_exit">Thoát</string>
+</resources>
