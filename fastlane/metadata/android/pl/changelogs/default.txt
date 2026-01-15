@@ -1,3 +1,0 @@
-Dziękujemy za używanie Phim Nè na Android TV! Rekomendujemy używanie najnowszej wersji serwera Phim Nè.
-
-Po więcej informacji sprawdź naszego bloga na jellyfin.org lub przeczytaj całą listę zmian na GitHubie.

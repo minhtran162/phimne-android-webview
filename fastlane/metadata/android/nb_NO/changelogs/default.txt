@@ -1,3 +1,0 @@
-Takk for at du bruker jellyfin for Android! Det er alltid anbefalt å bruke den nyeste versjonen av Phim Nè-serveren,
-
-For mer informasjon kan du se på vår blogg på jellyfin.org, eller lese endringsloggen på GitHub.

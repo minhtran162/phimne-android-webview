@@ -1,3 +1,0 @@
-Android için olan Phim Nè uygulamasını kullandığınız için teşekkür ederiz! En son yayınlanan Phim Nè Sunucusunun kullanılması her zaman tavsiye edilir.
-
-Daha fazla bilgi için lütfen jellyfin.org adresindeki blogumuza bakın veya GitHub'daki değişiklik günlüğünün tamamını okuyun.

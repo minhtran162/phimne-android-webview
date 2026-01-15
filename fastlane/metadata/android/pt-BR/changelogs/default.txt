@@ -1,3 +1,0 @@
-Obrigado por usar o Phim Nè para Android! Usar o servidor Phim Nè mais recente é sempre recomendado.
-
-Para obter mais informações, consulte nosso blog em jellyfin.org ou leia o todas as mudanças no GitHub.
