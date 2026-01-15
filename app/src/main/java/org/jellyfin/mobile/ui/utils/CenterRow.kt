@@ -9,7 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-inline fun CenterRow(
+fun CenterRow(
     modifier: Modifier = Modifier,
     content: @Composable RowScope.() -> Unit,
 ) = Row(
