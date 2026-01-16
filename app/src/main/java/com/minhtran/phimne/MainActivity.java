@@ -133,6 +133,9 @@ public class MainActivity extends AppCompatActivity {
 
     @SuppressLint("SetJavaScriptEnabled")
     private void setupWebView(String url) {
+        // Destroy existing WebView
+        destroyWebView();
+
         // Create WebView using the WebViewFactory
         webView = WebViewFactory.createWebView(this);
 
@@ -168,6 +171,7 @@ public class MainActivity extends AppCompatActivity {
         webSettings.setJavaScriptCanOpenWindowsAutomatically(false);
         webSettings.setSupportMultipleWindows(false);
         webSettings.setDatabaseEnabled(true);
+        webSettings.setMediaPlaybackRequiresUserGesture(false);
 
         if (isTvDevice()) {
             String tvUserAgent =
@@ -306,7 +310,7 @@ public class MainActivity extends AppCompatActivity {
                 "    };" +
                 "  }" +
                 "  function initNativeShell() {" +
-                "  const features = [];" +
+                "  const features = ['filedownload','displaylanguage','subtitleappearancesettings','subtitleburnsettings','exit','htmlaudioautoplay','htmlvideoautoplay','externallinks','clientsettings','multiserver','physicalvolumecontrol','remotecontrol','castmenuhashchange'];" +
                 "  let deviceId;" +
                 "  let deviceName;" +
                 "  let appName;" +
@@ -324,7 +328,49 @@ public class MainActivity extends AppCompatActivity {
                 "    }," +
                 "    updateVolumeLevel(value) {" +
                 "    }," +
-                "  };" +
+                "    };" +
+                "  function getDeviceProfile(profileBuilder, item) {" +
+                "      const profile = profileBuilder({" +
+                "          enableMkvProgressive: false" +
+                "      });" +
+                "      profile.CodecProfiles = profile.CodecProfiles.filter(function (i) {" +
+                "          return i.Type === 'Audio';" +
+                "      });" +
+                "      profile.CodecProfiles.push({" +
+                "          Type: 'Video'," +
+                "          Container: 'avi'," +
+                "          Conditions: [" +
+                "              {" +
+                "                  Condition: 'NotEquals'," +
+                "                  Property: 'VideoCodecTag'," +
+                "                  Value: 'xvid'" +
+                "              }" +
+                "          ]" +
+                "      });" +
+                "      profile.CodecProfiles.push({" +
+                "          Type: 'Video'," +
+                "          Codec: 'h264'," +
+                "          Conditions: [" +
+                "              {" +
+                "                  Condition: 'EqualsAny'," +
+                "                  Property: 'VideoProfile'," +
+                "                  Value: 'high|main|baseline|constrained baseline'" +
+                "              }," +
+                "              {" +
+                "                  Condition: 'LessThanEqual'," +
+                "                  Property: 'VideoLevel'," +
+                "                  Value: '41'" +
+                "              }]" +
+                "      });" +
+                "      profile.TranscodingProfiles.reduce(function (profiles, p) {" +
+                "          if (p.Type === 'Video' && p.CopyTimestamps === true && p.VideoCodec === 'h264') {" +
+                "              p.AudioCodec += ',ac3';" +
+                "              profiles.push(p);" +
+                "          }" +
+                "          return profiles;" +
+                "      }, []);" +
+                "      return profile;" +
+                "  }" +
                 "  window.NativeShell.AppHost = {" +
                 "    init() {" +
                 "      try {" +
@@ -349,6 +395,8 @@ public class MainActivity extends AppCompatActivity {
                 "    supports(command) {" +
                 "      return features.includes(command.toLowerCase());" +
                 "    }," +
+                "    getDeviceProfile," +
+                "    getSyncProfile: getDeviceProfile," +
                 "    deviceName() {" +
                 "      return deviceName;" +
                 "    }," +
